@@ -1,0 +1,34 @@
+app: scanfold
+version: 0.1
+
+
+dirstruct:
+  pydocflow:
+     clients:
+        README.md: |
+                   # Data Store Connectors
+
+                   Different Connectors
+        client_postgress.py: |
+                             # sample client
+     actors:
+        README.md: |
+                   # Data Comprehencer/Extraction/Transformation/
+
+                   ## supported for now
+
+                   - taskfile
+                   - ansible
+                   - Dockerfile
+
+        yaml__doc_extractor.py: ""
+        taskfile__doc_extractor.py: ""
+        taskfile__cmd_extractor.py: ""
+  tests:
+    e2e:
+      stack_datastores_be.yml : ""
+      run_tests.sh: ""
+    clients:
+      run_tests.sh: ""
+    actors:
+      run_tests.sh: ""
