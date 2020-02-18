@@ -2,10 +2,7 @@ import os
 from functools import partial
 from pathlib import Path
 
-from ruamel.yaml import YAML
-from dictscanfold.dircmds import Actions
-
-yaml = YAML()
+from dircmds import Actions
 
 
 def traverse_dictdir(doc, on_node=None, path=None, actions=None):
