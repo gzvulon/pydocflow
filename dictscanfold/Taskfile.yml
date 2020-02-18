@@ -32,6 +32,7 @@ tasks:
       # prepare output dirs
       - mkdir -p coverage_html_report
       - mkdir -p build_info
+      - rm -rf build_info/report_total.txt
 
       # run pytest with coverage [multi: -n 4]
       - |
@@ -44,15 +45,16 @@ tasks:
         . -s 2>&1 | tee cov.log || echo some fails
 
       # preprare report
+#        sed -n '/----------- coverage:/,/TOTAL/p' cov.log > build_info/coverage_txt_report.txt \
       - |
-        sed -n '/----------- coverage:/,/TOTAL/p' cov.log > build_info/coverage_txt_report.txt \
-        && cat cov.log | grep passed | tr -d '=,' > build_info/tests_passed_report.txt \
-        && cat build_info/coverage_txt_report.txt | grep TOTAL | awk '{print $6,  "of", $2, "lines"}' > build_info/coverage_total.txt \
-        && rm cov.log
+        python -c 'from pathlib import Path; print(Path("cov.log").read_text().split("-- coverage:")[1].split("TOTAL")[0])' \
+          > build_info/coverage_txt_report.txt
+        cat cov.log | grep passed | tr -d '=,' > build_info/tests_passed_report.txt \
+        && cat cov.log | grep TOTAL | awk '{print $6,  "of", $2, "lines"}' > build_info/coverage_total.txt \
+        && echo rm cov.log
 
       # total report
-      - cat build_info/tests_passed_report.txt >> build_info/total_report.txt
-      - cat build_info/coverage_total.txt >> build_info/total_report.txt
+      - cat build_info/*_report.txt >> build_info/report_total.txt
 
 
   clean:
@@ -61,11 +63,11 @@ tasks:
       - rm -rf out build dist build_info coverage_html_report .pytest_cache
 
   fix:
-    desc: _
+    desc: run code autoformat
     cmds:
-      - yapf -ir .
+      - yapf -ir -e .venv .
 
-# Build in clean venv
+# --- Build in clean venv ---
 
   build:
     desc:
@@ -82,9 +84,10 @@ tasks:
     cmds:
      - python -m venv .venv
      - .venv/bin/python -m pip install -r requirements.txt
+     - .venv/bin/python -m pip install pyinstaller
 
   rrbuild:
-    desc: _
+    desc: "Build in clear venv so pyinstaller wont create big exe"
     deps:
       - clean-venv
       - clean
