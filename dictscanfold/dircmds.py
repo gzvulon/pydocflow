@@ -29,7 +29,7 @@ def make_bash_script(actions, **kw):
     for act in actions:
         cmd = act.render_bash_script()
         changes.append(cmd)
-    res = "\n".join(changes)
+    res = "\n\n".join(changes)
     return res
 
 
@@ -58,15 +58,14 @@ class WriteIfNotPresent:
         self.force_write = force_write
 
     def render_bash_shell(self, force_write=None, **kw):
-        bash_write_text = """ cat << EOF > {filepath} 
-            {content}""".format(filepath=self.path, content=self.content)
+        bash_write_text = f"cat << EOF > {self.path}\n{self.content}"
         prefix = " " if force_write else f"test -f {self.path} || "
         bash_cmd = prefix + bash_write_text
         return bash_cmd
 
     def render_bash_script(self, force_write=None, **kw):
         bash_cmd = self.render_bash_shell(force_write=force_write, **kw)
-        return bash_cmd + 'EOF'
+        return bash_cmd + '\nEOF'
 
     def render_py(self, force_write=None, **kw):
 

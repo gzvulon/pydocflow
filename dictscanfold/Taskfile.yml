@@ -17,7 +17,42 @@ tasks:
     cmds:
       - pytest
 
+  test-cov:
+    desc: Run Coverage Tests
+    cmds:
+      # prepare output dirs
+      - mkdir -p coverage_html_report
+      - mkdir -p build_info
+
+      # run pytest with coverage [multi: -n 4]
+      - |
+        python -m pytest \
+        --cov-config .covrc \
+        --cov-report html \
+        --cov-report term \
+        --cov . \
+        --junit-xml=coverage_html_report/pytest_unit.junit.xml \
+        . -s 2>&1 | tee cov.log || echo some fails
+
+      # preprare report
+      - |
+        sed -n '/----------- coverage:/,/TOTAL/p' cov.log > build_info/coverage_txt_report.txt \
+        && cat cov.log | grep passed | tr -d '=,' > build_info/tests_passed_report.txt \
+        && cat build_info/coverage_txt_report.txt | grep TOTAL | awk '{print $6,  "of", $2, "lines"}' > build_info/coverage_total.txt \
+        && rm cov.log
+
+      # total report
+      - cat build_info/tests_passed_report.txt >> build_info/total_report.txt
+      - cat build_info/coverage_total.txt >> build_info/total_report.tx
+
+
   clean:
     desc: _
     cmds:
       - rm -rf out
+
+  fix:
+    desc: _
+    dir: ..
+    cmds:
+      - yapf -ir dictscanfold

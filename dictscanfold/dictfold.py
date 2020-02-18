@@ -59,8 +59,15 @@ def scanfold_dry(src, dest='.', force_write=False, root='root'):
     :param root: root node in document
     :return:
     """
-    doc_h = read_doc_from_file(src)
-    doc = doc_h[root]
+    if isinstance(src, str):
+        doc_h = read_doc_from_file(src)
+    elif isinstance(src, dict):
+        doc_h = src
+    else:
+        raise ValueError(f"src type not allowed: {type(src)}")
+
+    doc = doc_h[root] if root else doc_h
+
     actions: Actions = traverse_dictdir(
         doc,
         on_node=partial(node_to_action, force_write=force_write),
@@ -71,12 +78,14 @@ def scanfold_dry(src, dest='.', force_write=False, root='root'):
 
 
 def scanfold(src, dest='.', force_write=False, root='root',
-             dry=False, bash_script=False):
+             dry=False, bash_script=False, bash_shell=False):
     actions = scanfold_dry(src, dest=dest, force_write=force_write, root=root)
     if dry:
         return actions
     elif bash_script:
         return actions.make_bash_script()
+    elif bash_shell:
+        return actions.exec_bash_shell()
     else:
         result = actions.exec_py_func()
         return result
