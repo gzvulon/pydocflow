@@ -31,4 +31,4 @@ root:
     clients:
       run_tests.sh: ""
     actors:
-      run_tests.sh: ""
+      run_tests.sh: "#!/bin/bash"
