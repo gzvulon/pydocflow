@@ -58,14 +58,36 @@ tasks:
   clean:
     desc: _
     cmds:
-      - rm -rf out build dist
+      - rm -rf out build dist build_info coverage_html_report .pytest_cache
 
   fix:
     desc: _
     cmds:
       - yapf -ir .
 
+# Build in clean venv
+
   build:
     desc:
     cmds:
       - .venv/bin/python ppyinst.py dictfold.py -F
+
+  clean-venv:
+    desc: _
+    cmds:
+     - rm -rf .venv
+
+  create-venv:
+    desc: _
+    cmds:
+     - python -m venv .venv
+     - .venv/bin/python -m pip install -r requirements.txt
+
+  rrbuild:
+    desc: _
+    deps:
+      - clean-venv
+      - clean
+    cmds:
+      - task: create-venv
+      - task: build
