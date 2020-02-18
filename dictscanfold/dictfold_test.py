@@ -2,8 +2,10 @@ import datetime
 import logging
 import os
 from pathlib import Path
+import shutil
 
 import dictfold
+from functools import partial
 
 
 def get_test_dir():
@@ -34,7 +36,6 @@ def test__traverse_simple():
 
 
 def test__traversex_extrasmart():
-    from functools import partial
     doc = {'mf.txt': "", 'tmp': {'be.txt': '123d'}}
     out_p = get_test_dir()
     on_node = partial(dictfold.node_to_action, force_write=False)
@@ -46,7 +47,6 @@ def test__traversex_extrasmart():
 
 
 def test___scanfold():
-    import shutil
     me_par: Path = Path(__file__).parent
     src_p = me_par.joinpath('data4tests/scanfold_pydocflow.yml')
     tdir = get_test_dir()

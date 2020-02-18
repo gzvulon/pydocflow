@@ -67,14 +67,12 @@ def scanfold_dry(src, dest='.', force_write=False, root='root'):
 
     doc = doc_h[root] if root else doc_h
 
-    actions: dircmds.Actions = traverse_dictdir(
-        doc,
-        on_node=partial(
-            node_to_action,
-            force_write=force_write),
-        path=dest,
-        actions=dircmds.Actions()
-    )
+    actions: dircmds.Actions = traverse_dictdir(doc,
+                                                on_node=partial(
+                                                    node_to_action,
+                                                    force_write=force_write),
+                                                path=dest,
+                                                actions=dircmds.Actions())
 
     return actions
 

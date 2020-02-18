@@ -53,9 +53,8 @@ tasks:
 
   fix:
     desc: _
-    dir: ..
     cmds:
-      - yapf -ir dictscanfold
+      - yapf -ir .
 
   build:
     desc:
