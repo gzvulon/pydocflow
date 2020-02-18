@@ -80,9 +80,11 @@ tasks:
   create-venv:
     desc: _
     cmds:
-     - python -m venv .venv
-     - .venv/bin/python -m pip install -r requirements.txt
-     - .venv/bin/python -m pip install pyinstaller
+      - python -m venv .venv
+      - .venv/bin/python -m pip install -r requirements.txt
+      - .venv/bin/python -m pip install pyinstaller
+    status:
+      - test -d .venv
 
   rrbuild:
     desc: "Build in clear venv so pyinstaller wont create big exe"
@@ -103,6 +105,6 @@ tasks:
 
   package-build:
     desc: build package for publish
-    deps: [package-clean]
+    deps: [package-clean, create-venv]
     cmds:
       - .venv/bin/python setup.py sdist --formats=gztar,zip
