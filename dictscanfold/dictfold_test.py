@@ -7,10 +7,15 @@ import shutil
 import dictfold
 from functools import partial
 
+import dircmds
 
-def get_test_dir():
+
+def get_test_dir(callee_name=False):
     me_parent: Path = Path(__file__).parent
     tid = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H-%M-%S.%f')
+    if callee_name:
+        import inspect
+        tid = f"{tid}--{inspect.stack()[1].function}"
     test_dir = me_parent / 'out' / tid
     test_dir.mkdir(parents=True, exist_ok=True)
     return test_dir
@@ -37,19 +42,21 @@ def test__traverse_simple():
 
 def test__traversex_extrasmart():
     doc = {'mf.txt': "", 'tmp': {'be.txt': '123d'}}
-    out_p = get_test_dir()
+    out_p = get_test_dir(callee_name=True)
     on_node = partial(dictfold.node_to_action, force_write=False)
-    actions = dictfold.traverse_dictdir(doc,
-                                        on_node=on_node,
-                                        path=list(out_p.parts))
-    for cmd in actions:
-        print(cmd)
+    actions: dircmds.Actions = dictfold.traverse_dictdir(
+        doc, on_node=on_node, path=out_p, actions=dircmds.Actions())
+    actions.exec_py_func()
+
+    assert (out_p / 'mf.txt').exists()
+    assert (out_p / 'tmp' /
+            'be.txt').read_text().strip() == doc['tmp']['be.txt']
 
 
 def test___scanfold():
     me_par: Path = Path(__file__).parent
     src_p = me_par.joinpath('data4tests/scanfold_pydocflow.yml')
-    tdir = get_test_dir()
+    tdir = get_test_dir(callee_name=True)
 
     changes1 = dictfold.scanfold(str(src_p), dest=str(tdir))
     assert changes1
@@ -79,7 +86,7 @@ def test___scanfold_structure():
             'be.txt': '123d'
         }
     }
-    tdir = get_test_dir()
+    tdir = get_test_dir(callee_name=True)
 
     changes1 = dictfold.scanfold(doc, dest=str(tdir), root=None)
 
@@ -109,7 +116,7 @@ def test___scanfold_bash_shell():
             'de.txt': '1\n\2'
         }
     }
-    tdir = get_test_dir()
+    tdir = get_test_dir(callee_name=True)
 
     changes1 = dictfold.scanfold(doc,
                                  dest=str(tdir),
@@ -144,7 +151,7 @@ def test___scanfold_bash_script():
             'de.txt': '1\n\n   2\n'
         }
     }
-    tdir = get_test_dir()
+    tdir = get_test_dir(callee_name=True)
 
     unfold_script = dictfold.scanfold(doc,
                                       dest='.',
