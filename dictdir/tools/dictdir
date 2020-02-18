@@ -4,4 +4,5 @@ import dictdir
 import fire
 
 if __name__ == '__main__':
-    fire.Fire(dictdir)
+    d = {method.__name__: method for method in dictdir.__all__}
+    fire.Fire(d)

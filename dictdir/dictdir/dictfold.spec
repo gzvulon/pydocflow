@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['dictfold.py'],
-             pathex=['.'],
+             pathex=['/Users/ivanne/wss/pers/pydocflow/dictdir/dictdir'],
              binaries=[],
              datas=[],
              hiddenimports=[],
