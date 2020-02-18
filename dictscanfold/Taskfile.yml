@@ -49,10 +49,15 @@ tasks:
   clean:
     desc: _
     cmds:
-      - rm -rf out
+      - rm -rf out build dist
 
   fix:
     desc: _
     dir: ..
     cmds:
       - yapf -ir dictscanfold
+
+  build:
+    desc:
+    cmds:
+      - .venv/bin/python ppyinst.py dictfold.py -F
