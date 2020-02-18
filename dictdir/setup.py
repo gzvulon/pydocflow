@@ -27,7 +27,7 @@ setup(
     keywords="dict2dir scanfold ",
     url='https://github.com/gzvulon/pydocflow/dictdir',
     scripts=['tools/dictdir'],
-    packages=find_packages(exclude=('.venv',)),
+    packages=find_packages(exclude=('.venv', )),
     include_package_data=True,
     long_description=read('README.md'),
     install_requires=parse_requirements('requirements.txt'),

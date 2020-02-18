@@ -2,7 +2,7 @@ import os
 from functools import partial
 from pathlib import Path
 
-import dircmds
+from dictdir import dircmds
 
 
 def traverse_dictdir(doc, on_node=None, path=None, actions=None):
@@ -105,4 +105,6 @@ def scanfold(src,
 
 if __name__ == '__main__':
     import fire
-    fire.Fire()
+    import dictdir
+    d = {method.__name__: method for method in dictdir.__all__}
+    fire.Fire(d)
