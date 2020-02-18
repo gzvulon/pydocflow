@@ -25,12 +25,9 @@ setup(
     license="MIT",
     platforms=['any'],
     keywords="dict2dir scanfold ",
-    url='https://github.com/gzvulon/scanfold',
-    py_modules=["dictfold", "dircmds", "dictdir"],
+    url='https://github.com/gzvulon/pydocflow/dictdir',
     scripts=['tools/dictdir'],
-    packages=find_packages(),
-    # exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
-    # package_data={'cfg': [os.path.join('cfg', '*.yml')]},
+    packages=find_packages(exclude=('.venv',)),
     include_package_data=True,
     long_description=read('README.md'),
     install_requires=parse_requirements('requirements.txt'),
@@ -42,3 +39,7 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
 )
+
+# py_modules=["dictfoldld", "dircmds", "dictdir"],
+# exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+# package_data={'cfg': [os.path.join('cfg', '*.yml')]},
