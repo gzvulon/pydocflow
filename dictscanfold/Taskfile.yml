@@ -2,6 +2,9 @@
 
 version: '2.3'
 
+includes:
+  testcli: tests
+
 vars:
   GREETING: dictdir
 
@@ -16,6 +19,12 @@ tasks:
     desc: _
     cmds:
       - pytest
+
+  test-all:
+    desc: _
+    deps:
+      - testcli:all
+      - test-cov
 
   test-cov:
     desc: Run Coverage Tests

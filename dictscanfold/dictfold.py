@@ -6,6 +6,13 @@ import dircmds
 
 
 def traverse_dictdir(doc, on_node=None, path=None, actions=None):
+    """Walk on directory descriptor doc invokes actions
+    :param doc: directory descriptor
+    :param on_node: function to call on each node
+    :param path: current path in dirdoc
+    :param actions: Actions list to fill
+    :return: actions list
+    """
     path = path or []
     actions = actions if actions is not None else []
 

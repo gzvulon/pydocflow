@@ -1,0 +1,54 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: dictdir
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  first:
+    desc: _
+    vars:
+      VDIR: {sh: date '+%Y-%m-%dT%H-%M-%S'}
+    env:
+      WDIR: 'out/{{.VDIR}}'
+    cmds:
+      - echo "working on ${WDIR}"
+      - rm -rf ${WDIR}
+      - python dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
+      - test -f ${WDIR}/tests/actors/run_tests.sh
+      - cat ${WDIR}/pydocflow/actors/README.md | grep taskfile
+
+  second:
+    desc: _
+    vars:
+      VDIR: {sh: date '+%Y-%m-%dT%H-%M-%S'}
+    env:
+      WDIR: 'out/{{.VDIR}}'
+    cmds:
+      - echo "working on ${WDIR}"
+      - rm -rf ${WDIR}
+      - python dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
+      - test -f ${WDIR}/tests/actors/run_tests.sh
+      - cat ${WDIR}/pydocflow/actors/README.md | grep taskfile
+
+      - echo "ADD_ADD_ADD" >> ${WDIR}/pydocflow/actors/README.md
+      - rm -rf ${WDIR}/tests/actors/run_tests.sh
+      - python dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
+      - test -f ${WDIR}/tests/actors/run_tests.sh
+      - cat ${WDIR}/pydocflow/actors/README.md | grep ADD_ADD_ADD
+
+  all:
+    desc: _
+    cmds:
+      - task: first
+      - task: second
+
+
+
