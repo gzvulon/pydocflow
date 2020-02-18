@@ -22,7 +22,10 @@ def traverse_dictdir(doc, on_node=None, path=None, actions=None):
         if isinstance(v, dict):
             cmd = on_node(the_path, v, ntype='node')
             actions.append(cmd)
-            traverse_dictdir(v, on_node=on_node, path=the_path, actions=actions)
+            traverse_dictdir(v,
+                             on_node=on_node,
+                             path=the_path,
+                             actions=actions)
         else:
             cmd = on_node(the_path, v, ntype='leaf')
             actions.append(cmd)
@@ -68,17 +71,22 @@ def scanfold_dry(src, dest='.', force_write=False, root='root'):
 
     doc = doc_h[root] if root else doc_h
 
-    actions: Actions = traverse_dictdir(
-        doc,
-        on_node=partial(node_to_action, force_write=force_write),
-        path=dest,
-        actions=Actions()
-    )
+    actions: Actions = traverse_dictdir(doc,
+                                        on_node=partial(
+                                            node_to_action,
+                                            force_write=force_write),
+                                        path=dest,
+                                        actions=Actions())
     return actions
 
 
-def scanfold(src, dest='.', force_write=False, root='root',
-             dry=False, bash_script=False, bash_shell=False):
+def scanfold(src,
+             dest='.',
+             force_write=False,
+             root='root',
+             dry=False,
+             bash_script=False,
+             bash_shell=False):
     actions = scanfold_dry(src, dest=dest, force_write=force_write, root=root)
     if dry:
         return actions

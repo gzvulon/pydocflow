@@ -69,7 +69,8 @@ class WriteIfNotPresent:
 
     def render_py(self, force_write=None, **kw):
 
-        py_cmd = partial(write_if_new, path=self.path,
+        py_cmd = partial(write_if_new,
+                         path=self.path,
                          content=self.content,
                          force_write=force_write)
         return py_cmd
@@ -98,7 +99,8 @@ class EnsureDir:
         return self.render_bash_shell(force_write=force_write, **kw)
 
     def render_py(self, force_write=None, **kw):
-        py_cmd = partial(ensure_dir, path=self.path,
+        py_cmd = partial(ensure_dir,
+                         path=self.path,
                          content=self.content,
                          force_write=force_write)
         return py_cmd
