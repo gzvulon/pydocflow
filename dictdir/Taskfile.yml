@@ -7,6 +7,7 @@ includes:
 
 vars:
   GREETING: dictdir
+  the_dir: dictdir
 
 tasks:
   default:
@@ -18,7 +19,7 @@ tasks:
   test:
     desc: _
     cmds:
-      - pytest
+      - pytest dictdir
 
   test-all:
     desc: _
@@ -36,11 +37,11 @@ tasks:
 
       # run pytest with coverage [multi: -n 4]
       - |
-        python -m pytest \
+        python -m pytest {{.the_dir}} \
         --cov-config .covrc \
         --cov-report html \
         --cov-report term \
-        --cov . \
+        --cov {{.the_dir}} \
         --junit-xml=coverage_html_report/pytest_unit.junit.xml \
         . -s 2>&1 | tee cov.log || echo some fails
 
@@ -70,7 +71,7 @@ tasks:
   build:
     desc:
     cmds:
-      - .venv/bin/python ppyinst.py dictfold.py -F
+      - .venv/bin/python ppyinst.py dictdir/dictfold.py -F
 
   clean-venv:
     desc: _

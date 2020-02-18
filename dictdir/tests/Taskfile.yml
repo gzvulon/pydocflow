@@ -21,7 +21,7 @@ tasks:
     cmds:
       - echo "working on ${WDIR}"
       - rm -rf ${WDIR}
-      - python dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
+      - python dictdir/dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
       - test -f ${WDIR}/tests/actors/run_tests.sh
       - cat ${WDIR}/pydocflow/actors/README.md | grep taskfile
 
@@ -34,13 +34,13 @@ tasks:
     cmds:
       - echo "working on ${WDIR}"
       - rm -rf ${WDIR}
-      - python dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
+      - python dictdir/dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
       - test -f ${WDIR}/tests/actors/run_tests.sh
       - cat ${WDIR}/pydocflow/actors/README.md | grep taskfile
 
       - echo "ADD_ADD_ADD" >> ${WDIR}/pydocflow/actors/README.md
       - rm -rf ${WDIR}/tests/actors/run_tests.sh
-      - python dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
+      - python dictdir/dictfold.py scanfold ../scanfold.yml --dest ${WDIR}
       - test -f ${WDIR}/tests/actors/run_tests.sh
       - cat ${WDIR}/pydocflow/actors/README.md | grep ADD_ADD_ADD
 
