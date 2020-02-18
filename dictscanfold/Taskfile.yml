@@ -1,0 +1,23 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: dictdir
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  test:
+    desc: _
+    cmds:
+      - pytest
+
+  clean:
+    desc: _
+    cmds:
+      - rm -rf out
