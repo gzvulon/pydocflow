@@ -2,7 +2,7 @@ import os
 from functools import partial
 from pathlib import Path
 
-from dircmds import Actions
+import dircmds
 
 
 def traverse_dictdir(doc, on_node=None, path=None, actions=None):
@@ -30,7 +30,6 @@ def traverse_dictdir(doc, on_node=None, path=None, actions=None):
 
 
 def node_to_action(parent_ps, content, **kw):
-    from dictscanfold import dircmds
     ntype = kw.pop('ntype')
     path_p = Path(os.path.join(*parent_ps))
     if ntype == 'leaf':
@@ -68,12 +67,15 @@ def scanfold_dry(src, dest='.', force_write=False, root='root'):
 
     doc = doc_h[root] if root else doc_h
 
-    actions: Actions = traverse_dictdir(doc,
-                                        on_node=partial(
-                                            node_to_action,
-                                            force_write=force_write),
-                                        path=dest,
-                                        actions=Actions())
+    actions: dircmds.Actions = traverse_dictdir(
+        doc,
+        on_node=partial(
+            node_to_action,
+            force_write=force_write),
+        path=dest,
+        actions=dircmds.Actions()
+    )
+
     return actions
 
 

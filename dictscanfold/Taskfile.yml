@@ -43,7 +43,7 @@ tasks:
 
       # total report
       - cat build_info/tests_passed_report.txt >> build_info/total_report.txt
-      - cat build_info/coverage_total.txt >> build_info/total_report.tx
+      - cat build_info/coverage_total.txt >> build_info/total_report.txt
 
 
   clean:

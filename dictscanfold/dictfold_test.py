@@ -2,7 +2,8 @@ import datetime
 import logging
 import os
 from pathlib import Path
-from dictscanfold import dictfold
+
+import dictfold
 
 
 def get_test_dir():
