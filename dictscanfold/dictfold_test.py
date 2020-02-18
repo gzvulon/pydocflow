@@ -25,7 +25,7 @@ def test__traverse_simple():
     doc = {'out': {'mf.txt': "", 'tmp': {'be.txt': '123d'}}}
     actions = []
 
-    def register(p, v, **kw):
+    def register(p, _, **kw):
         ntype = kw.pop('ntype')
         path_p = Path('/'.join(p))
         if ntype == 'leaf':
@@ -118,12 +118,8 @@ def test___scanfold_bash_shell():
     }
     tdir = get_test_dir(callee_name=True)
 
-    changes1 = dictfold.scanfold(doc,
-                                 dest=str(tdir),
-                                 root=None,
-                                 bash_shell=True)
+    dictfold.scanfold(doc, dest=str(tdir), root=None, bash_shell=True)
 
-    # assert changes1 == 4
     assert (tdir / 'mf.txt').exists()
     assert (tdir / 'ver.yml').read_text().strip() == "version: '1.3'"
 
@@ -133,10 +129,7 @@ def test___scanfold_bash_shell():
     (tdir / 'mf.txt').write_text('DIRTY')
     (tdir / 'ver.yml').unlink()
 
-    changes2 = dictfold.scanfold(doc,
-                                 dest=str(tdir),
-                                 root=None,
-                                 bash_shell=True)
+    dictfold.scanfold(doc, dest=str(tdir), root=None, bash_shell=True)
     # assert changes2 == 1
     assert (tdir / 'mf.txt').read_text() == "DIRTY"
     assert (tdir / 'ver.yml').read_text().strip() == "version: '1.3'"

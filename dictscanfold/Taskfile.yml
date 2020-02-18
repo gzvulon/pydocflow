@@ -45,9 +45,8 @@ tasks:
         . -s 2>&1 | tee cov.log || echo some fails
 
       # preprare report
-#        sed -n '/----------- coverage:/,/TOTAL/p' cov.log > build_info/coverage_txt_report.txt \
       - |
-        python -c 'from pathlib import Path; print(Path("cov.log").read_text().split("-- coverage:")[1].split("TOTAL")[0])' \
+        python -c 'print(open("cov.log").read().split("-- coverage:")[1].split("TOTAL")[0])' \
           > build_info/coverage_txt_report.txt
         cat cov.log | grep passed | tr -d '=,' > build_info/tests_passed_report.txt \
         && cat cov.log | grep TOTAL | awk '{print $6,  "of", $2, "lines"}' > build_info/coverage_total.txt \
@@ -55,7 +54,6 @@ tasks:
 
       # total report
       - cat build_info/*_report.txt >> build_info/report_total.txt
-
 
   clean:
     desc: _
