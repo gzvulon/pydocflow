@@ -94,14 +94,15 @@ tasks:
       - task: build
 
 # -- package tasks
-  pack-clean:
+
+  package-clean:
     desc: clean package files
     cmds:
       - rm -rf dist
       - rm -rf refstore.egg-info
 
-  pack-build:
+  package-build:
     desc: build package for publish
-    deps: [pack-clean]
+    deps: [package-clean]
     cmds:
       - .venv/bin/python setup.py sdist --formats=gztar,zip

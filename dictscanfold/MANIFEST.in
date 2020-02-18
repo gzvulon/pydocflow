@@ -1,3 +1,5 @@
 # add datafiles to package
 include README.rst
 include requirements.txt
+include version/version.txt
+include version/name.txt

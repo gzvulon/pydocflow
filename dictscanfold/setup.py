@@ -10,10 +10,6 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-def get_version():
-    return read('version/version.txt')
-
-
 def parse_requirements(filename):
     """ load requirements from a pip requirements file """
     lineiter = (line.strip() for line in open(filename))
@@ -21,9 +17,9 @@ def parse_requirements(filename):
 
 
 setup(
-    name="scanfold",
-    version=get_version(),
-    author="yair dar",
+    name=read('version/name.txt').strip(),
+    version=read('version/version.txt').strip(),
+    author="Ivan Nesmeyanov",
     author_email="zvulon@uveye.com",
     description="Scanfolding from json on yaml to desired file structure",
     license="MIT",
@@ -31,8 +27,7 @@ setup(
     keywords="dict2dir scanfold ",
     url='https://github.com/gzvulon/scanfold',
     py_modules=["dictfold", "dircmds"],
-
-# packages=find_packages(),
+    # packages=find_packages(),
     # exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     # package_data={'cfg': [os.path.join('cfg', '*.yml')]},
     include_package_data=True,
