@@ -51,7 +51,7 @@ tasks:
           > build_info/coverage_txt_report.txt
         cat cov.log | grep passed | tr -d '=,' > build_info/tests_passed_report.txt \
         && cat cov.log | grep TOTAL | awk '{print $6,  "of", $2, "lines"}' > build_info/coverage_total.txt \
-        && echo rm cov.log
+        && rm cov.log
 
       # total report
       - cat build_info/*_report.txt >> build_info/report_total.txt
@@ -59,7 +59,7 @@ tasks:
   clean:
     desc: _
     cmds:
-      - rm -rf out build dist build_info coverage_html_report .pytest_cache
+      - rm -rf out build dist build_info coverage_html_report .pytest_cache *.egg-info
 
   fix:
     desc: run code autoformat
@@ -70,8 +70,9 @@ tasks:
 
   build:
     desc:
+    dir: dictdir
     cmds:
-      - .venv/bin/python ppyinst.py dictdir/dictfold.py -F
+      - ../.venv/bin/python ../ppyinst.py dictfold.py -F
 
   clean-venv:
     desc: _
