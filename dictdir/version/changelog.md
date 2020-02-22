@@ -1,4 +1,6 @@
 # Changelog
+## 0.0.4.1
+- introduce folddir method for create scanfold.yml from dir
 
 ## v 0.0.3
 
