@@ -26,11 +26,12 @@ jobs:
       run: |
         python -m pip install pyinstaller
         python ../ppyinst.py dictfold.py -F
+        mv ../dist ../dist_exe
       working-directory: ${{ env.working-directory }}/dictdir
 
     - name: Create Package
       run: |
-        setup.py sdist --formats=gztar,zip
         python setup.py sdist --formats=gztar,zip
+        mv ../dist ../dist_package
       working-directory: ${{ env.working-directory }}
 
