@@ -1,0 +1,75 @@
+version:
+  changelog.md: |+
+    # Changelog
+
+
+    ## v 0.0.1
+
+    - init
+
+  name.txt: appname
+  version.txt: 0.0.1
+.covrc: |
+  # .coveragerc to control coverage.py
+  [run]
+  branch = True
+
+  [report]
+  # Regexes for lines to exclude from consideration
+  exclude_lines =
+      # Have to re-enable the standard pragma
+      pragma: no cover
+
+      # Don't complain about missing debug-only code:
+      def __repr__
+      if self\.debug
+
+      # Don't complain if tests don't hit defensive assertion code:
+      raise AssertionError
+      raise NotImplementedError
+      raise MissingConfigurationException
+
+      # Don't complain if non-runnable code isn't run:
+      if 0:
+      if __name__ == .__main__.:
+
+  ignore_errors = True
+
+  [html]
+  directory = coverage_html_report
+.style.yapf: |
+  [style]
+  based_on_style = pep8
+  column_limit = 79
+  # dedent_closing_brackets = true
+  # allow_split_before_dict_value = false
+  # split_before_bitwise_operator = false
+  # SPLIT_BEFORE_NAMED_ASSIGNS: False
+  # SPLIT_ARGUMENTS_WHEN_COMMA_TERMINATED = true
+  split_arguments_when_comma_terminated = true
+Taskfile.yml: |-
+  # https://taskfile.dev
+
+  version: '2'
+
+  vars:
+    GREETING: Hello, World!
+
+  tasks:
+    default:
+      cmds:
+        - echo "{{.GREETING}}"
+      silent: true
+
+    prep-wss-pers:
+      cmds:
+      - python app.py start-index ~/wss/pers
+ppyinst.py: |
+  import re
+  import sys
+
+  from PyInstaller.__main__ import run
+
+  if __name__ == '__main__':
+      sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+      sys.exit(run())
