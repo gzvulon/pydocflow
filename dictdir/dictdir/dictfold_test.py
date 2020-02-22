@@ -4,10 +4,9 @@ import os
 from pathlib import Path
 import shutil
 
-import dictfold
 from functools import partial
-
-import dircmds
+from dictdir import dictfold
+from dictdir import dircmds
 
 
 def get_test_dir(callee_name=False):
