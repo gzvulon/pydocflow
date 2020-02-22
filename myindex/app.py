@@ -26,17 +26,6 @@ def start_index(cfg: CfgObj = None, start_dir=None):
     # cfg.indexed
 
 
-
-def tx(cfg: CfgObj = None):
-    path = Path('/Users/ivanne/wss/pers/pydocflow')
-    root = path
-    for x in path.iterdir():
-        rel = x.relative_to(root)
-        if x.name in cfg.exclude:
-            continue
-        if x.is_dir()
-        print(rel)
-
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     Cli = make_cfg_bond_dict(CfgObj, globals())

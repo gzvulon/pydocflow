@@ -87,6 +87,10 @@ def traverce_dir(path: Path, exceptions=None, dresd=None):
         diff['child_cnt'] = 1
         if dresd is not None:
             dresd.update(diff)
+        if path.suffix in ['.yml', '.txt', '.cfg', '.spec', '.py', '.md']:
+            dres['data'] = path.read_text()
+            # import pdb; pdb.set_trace()
+
         dres.update(diff)
 
     elif path.is_dir():
@@ -111,7 +115,7 @@ def traverce_dir(path: Path, exceptions=None, dresd=None):
         dres.update(diff)
 
         def _key(x):
-            return  '_' if x[1]['file_type'] == '__dir' else '__' + '_' + x[1]['name']
+            return '_' if x[1]['file_type'] == '__dir' else '__' + '_' + x[1]['name']
 
         dres['data'] = dict(sorted(dres['data'].items(), key=_key))
     else:
@@ -134,6 +138,11 @@ def test__process_dir():
     type_p.mkdir(parents=True, exist_ok=True)
 
     from ruamel.yaml import  YAML
+    from ruamel.yaml.scalarstring import FoldedScalarString
+    from ruamel.yaml.scalarstring import LiteralScalarString
+    folded = FoldedScalarString
+    literal = LiteralScalarString
+
     yaml = YAML()
     for path, content in traverce_dir(the_path):
         # path: Path
@@ -141,7 +150,12 @@ def test__process_dir():
         rel_p = path.relative_to(the_path)
         name = '@' + str(rel_p).replace("/", "@") + '@' + '.yml'
         pp = dest_p / name
+        for k, v in content.items():
+            if isinstance(v, str) and v.count("\n") > 0:
+                content[k] = literal(v)
+
         with pp.open('w') as fp:
+
             yaml.dump(content, fp)
             print(pp)
         if 'node_type' not in content:
@@ -150,5 +164,10 @@ def test__process_dir():
         try:
             os.symlink(f'../_idx_flat/{name}', str(type_p / nn))
         except Exception as ex:
-            print(ex)
+            print('RETRY', ex, type(ex))
+            try:
+                os.unlink(str(type_p / nn))
+                os.symlink(f'../_idx_flat/{name}', str(type_p / nn))
+            except Exception as ex:
+                print('FAILDE', ex, type(ex))
 

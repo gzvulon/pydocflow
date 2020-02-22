@@ -5,6 +5,42 @@ from pathlib import Path
 from dictdir import dircmds
 
 
+def traverce_dir(path: Path, exceptions=None):
+    exceptions = exceptions or [
+        '.git',
+        '.venv',
+        'out',
+        '.vscode',
+        '.idea',
+        '.egg',
+        '.eggs',
+        '.pytest_cache',
+        '__pycache__',
+        '.DS_Store'
+    ]
+    if path.is_file():
+        if path.suffix in ['.yml', '.txt', '.cfg', '.spec', '.py', '.md', '.covrc', '.yapf'
+                           ] or path.name in '.covrc':
+            text = path.read_text()
+            if '\n' in text:
+                from ruamel.yaml.scalarstring import LiteralScalarString
+                literal = LiteralScalarString
+                text = literal(text)
+            return text
+
+    elif path.is_dir():
+        rs = {}
+        its = sorted(path.iterdir(), key=lambda x: '0' if x.is_dir() else '1' + str(x))
+        for it in its:
+            if it.name in exceptions:
+                continue
+            rs[it.name] = traverce_dir(it)
+        return rs
+    else:
+        raise ValueError()
+
+
+
 def traverse_dictdir(doc, on_node=None, path=None, actions=None):
     """Walk on directory descriptor doc invokes actions
     :param doc: directory descriptor
@@ -72,7 +108,7 @@ def scanfold_dry(src, dest='.', force_write=False, root='root'):
     else:
         raise ValueError(f"src type not allowed: {type(src)}")
 
-    doc = doc_h[root] if root else doc_h
+    doc = doc_h[root] if root not in [None, 'None', 'no', '', False] else doc_h
 
     actions: dircmds.Actions = traverse_dictdir(doc,
                                                 on_node=partial(
@@ -103,8 +139,31 @@ def scanfold(src,
         return result
 
 
-if __name__ == '__main__':
-    import fire
-    import dictdir
-    d = {method.__name__: method for method in dictdir.__all__}
-    fire.Fire(d)
+
+
+def folddir(src):
+    from ruamel.yaml import  YAML
+    from ruamel.yaml.scalarstring import FoldedScalarString
+    from ruamel.yaml.scalarstring import LiteralScalarString
+    folded = FoldedScalarString
+    literal = LiteralScalarString
+
+    yaml = YAML()
+
+    res = traverce_dir(src)
+    p = Path('/Users/ivanne/wss/pers/pydocflow/dictdir/dictdir/out/0_cur')
+    dp = p / 'ff.yml'
+    yaml.dump(res, dp)
+    return dp
+
+def test__wer():
+    p_test = Path('/Users/ivanne/wss/pers/pydocflow/dictdir/dictdir/data4tests/python_basic')
+    dp = folddir(p_test)
+    scanfold(str(dp), str(dp.parent), root=None)
+
+#
+# if __name__ == '__main__':
+#     import fire
+#     import dictdir
+#     d = {method.__name__: method for method in dictdir.__all__}
+#     fire.Fire(d)
