@@ -1,0 +1,3 @@
+https://lab.tst.sh/iuyte/nbn/blob/master/Taskfile.yml
+https://git.cac.informatik.tu-darmstadt.de/christoph-conrads/objx/blob/fix_slice/Taskfile.yml
+https://gitlab.softpark.kz/arman.zhilkaidarov/afisha/blob/75d133581696fa19de4ebde5afa59047cb068bbe/vendor/github.com/stretchr/objx/Taskfile.yml
