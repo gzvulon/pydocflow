@@ -1,7 +1,23 @@
+#!/usr/local/bin/sampler --config
+
+variables:
+  rate-ms-default: &rate-ms-default 500
+  row_start_0: &row_start_0 0
+  row_hight_0: &row_hight_0 14
+
+  row_start_1: &row_start_1 15
+  row_hight_1: &row_hight_1 8
+
+  row_start_2: &row_start_2 24
+  row_hight_2: &row_hight_2 12
+  
+  row_start_3: &row_start_3 34
+  row_hight_3: &row_hight_3 8
+
 runcharts:
   - title: Search engine response time
-    position: [[0, 0], [80, 19]]
-    rate-ms: 500
+    position: [[0, *row_start_0], [39, *row_hight_0]]
+    rate-ms: *rate-ms-default
     triggers:
       - title: Latency threshold exceeded
         condition: echo "$prev < 14.8 && $cur > 14.8" |bc -l
@@ -22,6 +38,38 @@ runcharts:
         sample: curl -o /dev/null -s -w '%{time_total}'  https://search.yahoo.com
       - label: BING
         sample: curl -o /dev/null -s -w '%{time_total}'  https://www.bing.com
+    border: false
+sparklines:
+  - title: CPU usage
+    position: [[0, *row_start_1], [39, *row_hight_1]]
+    rate-ms: *rate-ms-default
+    scale: 0
+    sample: ps -A -o %cpu | awk '{s+=$1} END {print s}'
+    border: false
+  - title: Free memory pages
+    position: [[40, *row_start_1], [39, *row_hight_1]]
+    rate-ms: *rate-ms-default
+    scale: 0
+    sample: memory_pressure | grep 'Pages free' | awk '{print $3}'
+    border: false
+textboxes:
+  - title: Top 7 CPU Load
+    position: [[40, 0], [39, *row_hight_0]]
+    rate-ms: *rate-ms-default
+    # mac
+    sample: ps -Ao comm,pid,pcpu,tty -r | head -n 7
+
+  - title: Docker containers stats
+    position: [[0, *row_start_2], [79, *row_hight_2]]
+    rate-ms: 500
+    sample: docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}"
+    border: false
+  - title: Iostats
+    position: [[0, *row_start_3], [79, *row_hight_3]]
+    rate-ms: 500
+    sample: iostat
+    border: false
+
 barcharts:
   # - title: Local network activity
   #   position: [[45, 20], [35, 8]]
@@ -61,38 +109,7 @@ gauges:
 #         sample: echo 60
 #     min:
 #         sample: echo 0
-sparklines:
-  - title: CPU usage
-    position: [[0, 20], [40, 8]]
-    rate-ms: 200
-    scale: 0
-    sample: ps -A -o %cpu | awk '{s+=$1} END {print s}'
-  - title: Free memory pages
-    position: [[40, 20], [42, 8]]
-    rate-ms: 200
-    scale: 0
-    sample: memory_pressure | grep 'Pages free' | awk '{print $3}'
-textboxes:
-  - title: Docker containers stats
-    position: [[0, 29], [80, 10]]
-    rate-ms: 500
-    sample: docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}"
-  # - title: Local weather
-  #   position: [[69, 31], [13, 7]]
-  #   rate-ms: 10000
-  #   sample: curl wttr.in?0ATQF
-  #   border: false
-  # - title: New York weather
-  #   position: [[45, 31], [13, 7]]
-  #   rate-ms: 10000
-  #   sample: curl wttr.in/newyork?0ATQF
-  #   transform: echo 1
-  #   border: false
-  # - title: San Francisco weather
-  #   position: [[56, 31], [13, 7]]
-  #   rate-ms: 10000
-  #   sample: curl wttr.in/sanfrancisco?0ATQF
-  #   border: false
+
 asciiboxes:
 #   - title: UTC time
 #     position: [[45, 12], [35, 7]]
