@@ -1,0 +1,38 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  TOOLNAME: Sampler Monitor
+  GREETING: &refGREETING | 
+    Sampler is a tool for shell commands execution, 
+    visualization and alerting. 
+    Configured with a simple YAML file.
+
+tasks:
+
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  install:
+    desc: "{{.TOOLNAME}}. install."
+    vars:
+      Tos_deps_linux: "libasound2-dev"
+      TVERS: "1.1.0"
+      TNAME: "sampler-{{.TVERS}}-{{OS}}-amd64"
+      DWBASE: https://github.com/sqshq/sampler/releases/download
+    env:
+      DWURL:  "{{.DWBASE}}/{{.TVERS}}/{{.TNAME}}"
+    cmds:
+      - brew install sampler
+
+  example:
+    desc: "{{.TOOLNAME}}. run example file."
+    cmds:
+      - sampler --config example.yml
+
+  remove:
+    desc: "remove {{.TOOLNAME}} from system"

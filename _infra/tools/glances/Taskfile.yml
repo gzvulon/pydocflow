@@ -1,0 +1,31 @@
+# https://taskfile.dev
+
+version: '2.3'
+expansions: 3
+
+vars:
+  TOOLNAME: Glances Monitor
+  GREETING: &refGREETING | 
+    Glances is a cross-platform monitoring tool 
+    which aims to present a large amount of monitoring information 
+    through a curses or Web based interface. 
+    The information dynamically adapts 
+    depending on the size of the user interface.
+  # 0987654321`§,./;:]@[^] ~=0)('&%$#"!~±<
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  install:
+    desc: "{{.TOOLNAME}}. install."
+    cmds:
+      -  python -m pip install  --upgrade glances
+
+  example:
+    desc: "{{.TOOLNAME}}. run example file."
+    cmds:
+      -  python -m pip install  --upgrade glances

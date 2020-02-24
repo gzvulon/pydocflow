@@ -1,0 +1,33 @@
+# https://taskfile.dev
+
+version: '2.3'
+expansions: 3
+tasks:
+  ___desc: {desc: -Sowtfare Installation Tasks-}
+  default:
+    cmds:
+      - task: ___desc
+      - task -l
+    silent: true
+
+  sampler:
+    desc: |
+      Sampler is a tool for shell commands execution, 
+        visualization and alerting. 
+        Configured with a simple YAML file.
+    cmds:
+      - task -d tools/sampler install
+
+  glances:
+    desc: |
+      Glances is a cross-platform monitoring tool 
+        which aims to present a large amount of monitoring information 
+        through a curses or Web based interface. 
+        The information dynamically adapts 
+        depending on the size of the user interface.
+    cmds:
+      -  task -d tools/glances install
+
+  watch: 
+    desc: watch like in lunux
+    cmds: [brew install watch]
