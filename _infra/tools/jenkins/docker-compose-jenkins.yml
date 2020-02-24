@@ -1,0 +1,25 @@
+# docker run -d -v jenkins_home:/var/jenkins_home -p 8080:8080 -p 50000:50000 \
+# --env JAVA_OPTS=-Dhudson.footerURL=http://mycompany.com jenkins/jenkins:lts
+
+# RUN apt-get update && apt-get install -y docker.io  && rm -rf /var/lib/apt/lists/*
+
+version: '2.1'
+services:
+    jen_master:
+        image: 'jenkins/jenkins:lts'
+        # restart: always
+        environment:
+            - JAVA_OPTS=-Dhudson.footerURL=http://mycompany.com
+        volumes:
+            - jenkins_home:/var/jenkins_home
+            - /var/run/docker.sock:/var/run/docker.sock
+        ports:
+            - "8080:8080"
+            - "50000:50000"
+        # healthcheck:
+        #     test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+        #     interval: 30s
+        #     timeout: 30s
+        #     retries: 3
+volumes:
+    jenkins_home:
