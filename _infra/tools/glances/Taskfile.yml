@@ -28,4 +28,4 @@ tasks:
   example:
     desc: "{{.TOOLNAME}}. run example file."
     cmds:
-      -  python -m pip install  --upgrade glances
+      -  glances

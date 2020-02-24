@@ -5,9 +5,8 @@ expansions: 3
 tasks:
   ___desc: {desc: -Sowtfare Installation Tasks-}
   default:
-    cmds:
-      - task: ___desc
-      - task -l
+    deps: ___desc
+    cmds: [task -l]
     silent: true
 
   sampler:
