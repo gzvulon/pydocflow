@@ -1,10 +1,10 @@
 runcharts:
   - title: Search engine response time
-    position: [[0, 0], [45, 19]]
+    position: [[0, 0], [80, 19]]
     rate-ms: 500
     triggers:
       - title: Latency threshold exceeded
-        condition: echo "$prev < 4.8 && $cur > 4.8" |bc -l
+        condition: echo "$prev < 14.8 && $cur > 14.8" |bc -l
         actions:
             terminal-bell: true
             sound: true
@@ -23,80 +23,80 @@ runcharts:
       - label: BING
         sample: curl -o /dev/null -s -w '%{time_total}'  https://www.bing.com
 barcharts:
-  - title: Local network activity
-    position: [[45, 20], [35, 8]]
-    rate-ms: 500
-    scale: 0
-    items:
-      - label: UDP bytes in
-        sample: nettop -J bytes_in -l 1 -m udp | awk '{sum += $4} END {print sum}'
-      - label: UDP bytes out
-        sample: nettop -J bytes_out -l 1 -m udp | awk '{sum += $4} END {print sum}'
-      - label: TCP bytes in
-        sample: nettop -J bytes_in -l 1 -m tcp | awk '{sum += $4} END {print sum}'
-      - label: TCP bytes out
-        sample: nettop -J bytes_out -l 1 -m tcp | awk '{sum += $4} END {print sum}'
+  # - title: Local network activity
+  #   position: [[45, 20], [35, 8]]
+  #   rate-ms: 500
+  #   scale: 0
+  #   items:
+  #     - label: UDP bytes in
+  #       sample: nettop -J bytes_in -l 1 -m udp | awk '{sum += $4} END {print sum}'
+  #     - label: UDP bytes out
+  #       sample: nettop -J bytes_out -l 1 -m udp | awk '{sum += $4} END {print sum}'
+  #     - label: TCP bytes in
+  #       sample: nettop -J bytes_in -l 1 -m tcp | awk '{sum += $4} END {print sum}'
+  #     - label: TCP bytes out
+  #       sample: nettop -J bytes_out -l 1 -m tcp | awk '{sum += $4} END {print sum}'
 gauges:
-  - title: YEAR PROGRESS
-    position: [[45, 0], [35, 2]]
-    cur:
-        sample: date +%j
-    max:
-        sample: echo 365
-    min:
-        sample: echo 0
-  - title: DAY PROGRESS
-    position: [[45, 3], [35, 2]]
-    cur:
-        sample: date +%H
-    max:
-        sample: echo 24
-    min:
-        sample: echo 0
-  - title: HOUR PROGRESS
-    position: [[45, 6], [35, 2]]
-    cur:
-        sample: date +%M
-    max:
-        sample: echo 60
-    min:
-        sample: echo 0
+#   - title: YEAR PROGRESS
+#     position: [[45, 0], [35, 2]]
+#     cur:
+#         sample: date +%j
+#     max:
+#         sample: echo 365
+#     min:
+#         sample: echo 0
+#   - title: DAY PROGRESS
+#     position: [[45, 3], [35, 2]]
+#     cur:
+#         sample: date +%H
+#     max:
+#         sample: echo 24
+#     min:
+#         sample: echo 0
+#   - title: HOUR PROGRESS
+#     position: [[45, 6], [35, 2]]
+#     cur:
+#         sample: date +%M
+#     max:
+#         sample: echo 60
+#     min:
+#         sample: echo 0
 sparklines:
   - title: CPU usage
-    position: [[0, 20], [22, 8]]
+    position: [[0, 20], [40, 8]]
     rate-ms: 200
     scale: 0
     sample: ps -A -o %cpu | awk '{s+=$1} END {print s}'
   - title: Free memory pages
-    position: [[22, 20], [23, 8]]
+    position: [[40, 20], [42, 8]]
     rate-ms: 200
     scale: 0
     sample: memory_pressure | grep 'Pages free' | awk '{print $3}'
 textboxes:
   - title: Docker containers stats
-    position: [[0, 29], [45, 10]]
+    position: [[0, 29], [80, 10]]
     rate-ms: 500
     sample: docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}"
-  - title: Local weather
-    position: [[69, 31], [13, 7]]
-    rate-ms: 10000
-    sample: curl wttr.in?0ATQF
-    border: false
-  - title: New York weather
-    position: [[45, 31], [13, 7]]
-    rate-ms: 10000
-    sample: curl wttr.in/newyork?0ATQF
-    transform: echo 1
-    border: false
-  - title: San Francisco weather
-    position: [[56, 31], [13, 7]]
-    rate-ms: 10000
-    sample: curl wttr.in/sanfrancisco?0ATQF
-    border: false
+  # - title: Local weather
+  #   position: [[69, 31], [13, 7]]
+  #   rate-ms: 10000
+  #   sample: curl wttr.in?0ATQF
+  #   border: false
+  # - title: New York weather
+  #   position: [[45, 31], [13, 7]]
+  #   rate-ms: 10000
+  #   sample: curl wttr.in/newyork?0ATQF
+  #   transform: echo 1
+  #   border: false
+  # - title: San Francisco weather
+  #   position: [[56, 31], [13, 7]]
+  #   rate-ms: 10000
+  #   sample: curl wttr.in/sanfrancisco?0ATQF
+  #   border: false
 asciiboxes:
-  - title: UTC time
-    position: [[45, 12], [35, 7]]
-    rate-ms: 500
-    sample: env TZ=UTC date +%r
-    border: false
-    font: 3d
+#   - title: UTC time
+#     position: [[45, 12], [35, 7]]
+#     rate-ms: 500
+#     sample: env TZ=UTC date +%r
+#     border: false
+#     font: 3d
