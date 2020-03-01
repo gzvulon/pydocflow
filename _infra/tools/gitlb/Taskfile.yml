@@ -1,0 +1,50 @@
+# https://taskfile.dev
+
+version: '2'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+
+  start-gitlab:
+    desc:
+    cmds: 
+      - |
+        sudo docker run --detach \
+        --network bridge
+        --hostname gitlab.example.com \
+        --publish 443:443 --publish 80:80 --publish 8822:22 \
+        --name gitlab \
+        --restart always \
+        --volume $(pwd)/srv/gitlab/config:/etc/gitlab \
+        --volume $(pwd)/srv/gitlab/logs:/var/log/gitlab \
+        --volume $(pwd)/srv/gitlab/data:/var/opt/gitlab \
+        gitlab/gitlab-ce:latest
+
+  start-gitlab-runner:
+    desc:
+    cmds:
+    - | 
+      docker run -d --name gitlab-runner --restart always \
+      -v $(pwd)/srv/gitlab-runner/config:/etc/gitlab-runner \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      gitlab/gitlab-runner:latest
+
+  start-gitlab-runner-register:
+    desc:
+    cmds:
+    - | 
+      docker run --rm -it  \
+      -v $(pwd)srv/gitlab-runner/config:/etc/gitlab-runner \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      gitlab/gitlab-runner:latest \
+      register
+
+      
+# "gitlab/gitlab-runner-helper:x86_64-081978aa" to my [runners.docker]
