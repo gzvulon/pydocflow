@@ -7,3 +7,12 @@ org_ref:
   latest: master
   copied: 2020-03-13T23-05-17
 
+commited_ref:
+  link: git@github.com:gzvulon/pydocflow.git
+  commit: 1e7dd710b275d1dea21fe17a3813c5129c5e1f1f
+  Author: Ivan Nesmeyanov <zvulon@gmail.com>
+  Date:   Fri Mar 13 23:22:16 2020 +0200
+  desc: link external repo.
+  commit_link: metarepo.link-repo;dest_dir=_repos/pg-clients;link=https://github.com/jstriebel/pg-clients.git;commit=f927fc457483044b1ee92458bacc0c3ab4441756
+  latest: master
+  copied: 2020-03-13T23-05-17
