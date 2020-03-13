@@ -1,0 +1,9 @@
+org_ref:
+  link: https://github.com/jstriebel/pg-clients.git
+  commit: f927fc457483044b1ee92458bacc0c3ab4441756
+  Author: Jonathan Striebel <jstriebel@users.noreply.github.com>
+  Date:   Tue Oct 30 10:03:13 2018 +0100
+  desc: Overview of web-based, dockerized PostgreSQL clients
+  branch: master
+  copied_date: 2020-03-13T23-05-17
+

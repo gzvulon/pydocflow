@@ -2,7 +2,7 @@ out
 coverage_html_report
 build_info
 cov.log
-
+dbtry
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
