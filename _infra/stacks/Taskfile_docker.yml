@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  init-swarm-local:
+    desc: create swarm manager on single node and create do-ob network
+    cmds:
+      - docker swarm init --advertise-addr 172.17.0.1
+      - docker network create --driver=overlay --attachable do-ob

@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: Stack Management
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  run-mongo:
+    desc: run mongo db docker
+    cmds:
+      - docker stack deploy -c stack-mongo.yml mongo

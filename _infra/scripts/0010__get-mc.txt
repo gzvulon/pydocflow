@@ -1,0 +1,11 @@
+    1  mkdir _init
+    2  cd _init/
+    3  wget https://dl.min.io/client/mc/release/linux-amd64/mc
+    4  chmod +X mc 
+    5  ./mc
+    6  chmod +x mc 
+    7  ./mc
+    8  sudo mv mc /usr/bin/
+    9  mc
+   10  history 
+   11  history > 0010__get-mc.txt

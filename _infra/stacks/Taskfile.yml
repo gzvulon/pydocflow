@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: Infra Root
+
+includes:
+  docker: './Taskfile_docker.yml'
+  stack: './Taskfile_stack.yml'
+  
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+

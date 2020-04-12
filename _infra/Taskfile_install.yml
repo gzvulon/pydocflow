@@ -30,3 +30,55 @@ tasks:
   watch: 
     desc: watch like in lunux
     cmds: [brew install watch]
+
+# --- scripts ----
+
+  install-ubuntu-v18-deps:
+    cmds:
+      - sudo apt install $(cat ubutu18.deps.txt)
+
+  install-zsh-base:
+    desc: "install zsh and oh-my-zsh from github"
+    cmds:
+      - sudo apt install -y zsh curl wget
+      - git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+      - cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+#       - sudo chsh -s /bin/zsh
+
+  config-zsh:
+    desc: "set bureau theme for zsh"
+    cmds:
+      - sed -i 's/.*ZSH_THEME=.*/ZSH_THEME="bureau"/' ~/.zshrc
+      - sed -i 's/.*DISABLE_UPDATE_PROMPT=.*/DISABLE_UPDATE_PROMPT=true/' ~/.zshrc
+      - sed -i 's/.*DISABLE_AUTO_UPDATE=.*/DISABLE_AUTO_UPDATE=true/' ~/.zshrc
+      
+  install-zsh-full:
+    desc: "install preconfigured zsh and oh-my-zsh from github"
+    cmds:
+     - task: install-zsh-base
+     - task: config-zsh
+
+  mirror-me:
+    desc: "update veriosn"
+    cmds:
+    - mc mirror gcs/dardev-init/_init/ _init
+
+  install-docker:
+    desc: "install docker"
+    from_url: https://phoenixnap.com/kb/how-to-install-docker-on-ubuntu-18-04
+    cmds:
+    - |
+      sudo apt-get update \
+      && sudo apt-get install -y \
+         apt-transport-https \
+         ca-certificates \
+         curl \
+         software-properties-common
+    - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+    - |
+      sudo apt-get update \
+      && sudo apt-get install -y docker-ce \
+      && sudo apt-cache madison docker-ce
+    
+     
