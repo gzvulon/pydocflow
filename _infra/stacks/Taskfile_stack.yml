@@ -16,3 +16,8 @@ tasks:
     desc: run mongo db docker
     cmds:
       - docker stack deploy -c stack-mongo.yml mongo
+
+  run-cicd:
+    desc: run mongo db docker
+    cmds:
+      - docker stack deploy -c stack-cicd.yml cicd
