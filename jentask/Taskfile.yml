@@ -1,0 +1,29 @@
+# https://taskfile.dev
+
+version: '2'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  test:
+    desc: _
+    cmds:
+      - echo testing
+
+  build:
+    desc: _
+    cmds:
+      - echo building
+
+  ci-build:
+    # Used By Jenkins
+    desc: cicd workflow
+    cmds:
+      - task test
+      - task build
