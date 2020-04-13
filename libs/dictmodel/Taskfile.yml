@@ -1,0 +1,19 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: Dict Models
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  test:
+    desc: run tests
+    cmds:
+      - pytest dictmodel/test_*.py -s
+

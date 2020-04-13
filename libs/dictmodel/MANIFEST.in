@@ -1,0 +1,3 @@
+# add datafiles to package
+include README.rst
+include requirements.txt
