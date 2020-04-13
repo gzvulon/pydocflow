@@ -24,6 +24,9 @@ tasks:
   ci-build:
     # Used By Jenkins
     desc: cicd workflow
+    deps:
+      - test
+      - build
     cmds:
       - echo 'hello'
       - task test
