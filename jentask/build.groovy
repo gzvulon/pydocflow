@@ -70,7 +70,7 @@ timestamps {
 
     catchError {
         dir('jentask'){
-            sh
+            // sh
             step_stages_from_tasks(jg, jg.prj_dir, 'Taskfile.yml', 'ci-build')
         }
     }
