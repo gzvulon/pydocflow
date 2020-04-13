@@ -25,5 +25,6 @@ tasks:
     # Used By Jenkins
     desc: cicd workflow
     cmds:
+      - echo 'hello'
       - task test
       - task build

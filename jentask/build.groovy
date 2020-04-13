@@ -40,7 +40,8 @@ def step_stages_from_tasks(jg, wd, filename, root_job){
     }
 }
 
-node(jg.node_label) {
+// node(jg.node_label) {
+node() {
 timestamps {
 
     stage('fetch'){
