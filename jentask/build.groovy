@@ -6,7 +6,7 @@ def jg = [
     node_label: 'mlg-cpu',
     cmds: [],
     tstages: [:],
-    prj_dir: '.',
+    prj_dir: 'jentask',
     commits: [],
     params: [
         samle: 'yes'
@@ -69,7 +69,10 @@ timestamps {
     }
 
     catchError {
-        step_stages_from_tasks(jg, jg.prj_dir, 'jentask/Taskfile.yml', 'ci-build')
+        dir('jentask'){
+            sh
+            step_stages_from_tasks(jg, jg.prj_dir, 'Taskfile.yml', 'ci-build')
+        }
     }
 
    //  stage('finish'){
