@@ -1,0 +1,54 @@
+# https://taskfile.org
+
+version: '2.3'
+
+custom:
+  refs:
+    -  https://www.analyticsvidhya.com/blog/2017/05/beginners-guide-to-data-exploration-using-elastic-search-and-kibana/
+
+tasks:
+
+  status:
+    desc: _
+    cmds:
+      - |
+        ls -d -1 */ | xargs -I {} bash -c \
+        "echo && echo "prj:{}" && git -C {} status" | grep -e prj -e modif
+
+  branch:
+    desc: _
+    cmds:
+      - |
+        ls -d -1 */ | xargs -I {} bash -c \
+        "echo ___ && echo "prj:{}" && git -C {} branch" | grep -e prj -e '*' -e ___
+
+  gc-master:
+    desc: _
+    cmds:
+      - |
+        ls -d -1 */ | xargs -I {} bash -c \
+        "git -C {} checkout master"
+
+  git-pull:
+    desc: _
+    cmds:
+      - |
+        ls -d -1 */ | xargs -I {} bash -c \
+        "echo ___ && echo "prj:{}" && git -C {} pull --rebase"
+
+  install-mongo-clients:
+    desc:
+    cmds:
+     - sudo apt-get install mongodb-clients
+
+  init-elk:
+    desc: _
+    cmds:
+      - docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it --name elk sebp/elk
+
+  init-mongo:
+    # https://www.thachmai.info/2015/04/30/running-mongodb-container/
+    desc: _
+    cmds:
+      - mkdir -p ~/dock/mongo/data
+      - docker run -d -p 27017:27017 -v ~/dock/mongo/data:/data/db mongo

@@ -1,0 +1,36 @@
+# https://taskfile.org
+
+version: '2'
+
+vars:
+  GREETING: Hello, World!
+  ME_NAME: bme_scraches
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  show-remotes:
+    desc: _
+    dir: ..
+    cmds:
+      - |
+        ls -1 | xargs -I {} bash -c \
+        'echo {}: \
+        $(git -C {} remote -v 2>/dev/null | grep fetch | cut -f2)' \
+        | grep fetch
+    silent: yes
+
+  show-branches:
+    desc: _
+    dir: ..
+    cmds:
+      - |
+        ls -1 | xargs -I {} bash -c \
+        'git -C {} branch > /dev/null 2>&1 &&
+         echo {}: \
+         $(git -C {} branch 2>/dev/null | grep "*" | cut -d" " -f2) \
+        '
+    silent: yes
