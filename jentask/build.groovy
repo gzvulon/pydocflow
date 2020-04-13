@@ -13,6 +13,18 @@ def jg = [
     ]
 ]
 
+def add_stages(jg, filename, prefix){
+    // echo "Load tasks from ${filename}"
+    // filename='Taskfile.yml'
+    def taskfile = readYaml file: filename
+    for ( e in taskfile['tasks'] ) {
+        jg.tstages[prefix + e.key] = e.value
+        // echo "adding ${prefix}${e.key}"
+    }
+    echo "Loaded tasks from ${filename}"
+    return taskfile
+}
+
 
 def step_stages_from_tasks(jg, wd, filename, root_job){
     // create piple stages from task commands
