@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "dictmodel"
+version = "0.1.0"
+description = ""
+authors = ["Yair V Dar <zvulon@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"

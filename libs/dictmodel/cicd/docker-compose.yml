@@ -1,0 +1,10 @@
+# docker-compose.yaml
+version: '3'
+
+services:
+  devpython:
+    build: 
+        context: ..
+        dockerfile: cicd/dev.Dockerfile
+
+      

@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '2'
+
+vars:
+  GREETING: Python Dev Docker
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+  
+  build:
+    desc: _
+    cmds:
+      - docker-compose build devpython
