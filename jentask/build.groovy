@@ -69,10 +69,7 @@ timestamps {
     }
 
     catchError {
-        dir('jentask'){
-            // sh
-            step_stages_from_tasks(jg, jg.prj_dir, 'Taskfile.yml', 'ci-build')
-        }
+        step_stages_from_tasks(jg, jg.prj_dir, 'Taskfile.yml', 'ci-build')
     }
 
    //  stage('finish'){
