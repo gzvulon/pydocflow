@@ -17,3 +17,11 @@ tasks:
     cmds:
       - pytest dictmodel/test_*.py -s
 
+  ci-build:
+    tags:
+      - jenkins-build
+    desc: run on jenkins
+    cmds:
+      - task: test
+      - echo "Ci Build Done"
+
