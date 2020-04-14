@@ -11,8 +11,9 @@ tasks:
       - echo "{{.GREETING}}"
       - task -l
     silent: true
-  
+
   build:
     desc: _
     cmds:
+      - docker build -t devpy -f dev.Dockerfile .
       - docker-compose build devpython

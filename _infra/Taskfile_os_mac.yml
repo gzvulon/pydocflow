@@ -1,0 +1,33 @@
+# https://taskfile.dev
+
+version: '2.3'
+expansions: 3
+
+includes:
+  install: Taskfile_install.yml
+
+vars:
+  # GREETING: INFRA ROOT
+  # 0987654321`§,./;:]@[^] ~=0)('&%$#"!~±<>?+*}`{"')
+
+tasks:
+  ___desc: {desc: INFRA ROOT}
+
+  default:
+    cmds:
+      - task: ___desc
+      - task -l
+    silent: true
+
+  readme:
+    desc: |
+
+      # Task Controll
+
+      Example system for commands for general purpuse
+      -------
+
+  install-essentials-mac:
+    desc: install essentials pacakges on mac
+    cmds:
+      - brew install moreutils  # install sponge

@@ -1,0 +1,47 @@
+# https://taskfile.org
+
+version: '2.2'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  task-download:
+    cmds:
+      - curl -s https://taskfile.org/install.sh | sh
+
+  hello:
+    desc: _
+    cmds:
+      - echo hello from jen
+
+  pull-bins:
+    desc: _
+    cmds:
+      - echo pull-bins
+      - task --version
+
+  finish:
+    desc: _
+    cmds:
+      - echo finish
+      - find . | wc -l
+      - ls -alh
+
+  info:
+    desc: _
+    vars:
+      branch_name: {sh: git rev-parse --abbrev-ref HEAD}
+      short_commit: {sh: git rev-parse --short HEAD}
+      ts: {sh: date +'%Y-%m-%d--%H-%M-%S'}
+    cmds:
+      - echo 'branch_name:' "{{.branch_name}}"
+      - echo 'short_commit:' "{{.short_commit}}"
+      - echo 'ts:' "{{.ts}}"
+    silent: yes
+

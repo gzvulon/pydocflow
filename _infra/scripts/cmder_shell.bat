@@ -1,0 +1,1 @@
+cmd.exe /k C:\Users\Ivan\mlg_infra\cmder_work\vendor\init.bat
