@@ -17,41 +17,65 @@ tasks:
     vars:
       NO_PACKAGES: --no-default-packages
     cmds:
-      - conda create  -y -n condapip-py36 python=3.6
+      - conda create  -y -n condapip-py37 python=3.7
     status:
-      - conda env list | grep condapip-py36
-
-  venv-remove:
-    desc: _
-    cmds:
-      - conda env remove -n condapip-py36
-
-  venv-python:
-    desc: _
-    cmds:
-      - conda run -n condapip-py36 which python3
-
-  venv-install-pip:
-    desc: _
-    cmds:
-      - conda run -n condapip-py36 pip install fire
-
-  venv-install-build:
-    desc: _
-    cmds:
-      - conda install -n condapip-py36 pyinstaller
-    
+      - conda env list | grep condapip-py37
+  
   venv-enter-:
     desc: usage $(task venv-enter-)
     cmds:
-      - echo "conda activate condapip-py36"
+      - echo "conda activate condapip-py37"
     silent: yes
+    
+  venv-remove:
+    desc: _
+    cmds:
+      - conda env remove -n condapip-py37
 
+  venv-python:
+    desc: _
+    deps:
+      - venv-create
+    cmds:
+      - conda run -n condapip-py37 which python3
+
+  venv-install-pip:
+    desc: _
+    deps: 
+      - venv-create
+    cmds:
+      - conda run -n condapip-py37 pip install fire
+    status: 
+      - conda run -n condapip-py37 pip | grep fire
+
+  venv-install-build:
+    desc: _
+    deps: 
+      - venv-create    
+    cmds:
+      - conda install -y n condapip-py37 pyinstaller
+    status:
+      - conda list -n condapip-py37 | grep pyinstaller
+    
+  
+  venv-update:
+    desc: _
+    deps:
+      - venv-install-build
+      - venv-install-pip
+
+  venv-install:
+    desc: _
+    cmds:
+      - task: venv-create
+      - task: venv-update
+    
   test:
     desc: _
     cmds:
-      - conda run -n condapip-py36 python pyapp/pyapp.py
+      - conda run -n condapip-py37 python pyapp/pyapp.py
 
+  
 
   
 
