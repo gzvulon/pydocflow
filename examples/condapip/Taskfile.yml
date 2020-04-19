@@ -1,0 +1,58 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: Conda PIP
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  venv-create:
+    desc: _
+    vars:
+      NO_PACKAGES: --no-default-packages
+    cmds:
+      - conda create  -y -n condapip-py36 python=3.6
+    status:
+      - conda env list | grep condapip-py36
+
+  venv-remove:
+    desc: _
+    cmds:
+      - conda env remove -n condapip-py36
+
+  venv-python:
+    desc: _
+    cmds:
+      - conda run -n condapip-py36 which python3
+
+  venv-install-pip:
+    desc: _
+    cmds:
+      - conda run -n condapip-py36 pip install fire
+
+  venv-install-build:
+    desc: _
+    cmds:
+      - conda install -n condapip-py36 pyinstaller
+    
+  venv-enter-:
+    desc: usage $(task venv-enter-)
+    cmds:
+      - echo "conda activate condapip-py36"
+    silent: yes
+
+  test:
+    desc: _
+    cmds:
+      - conda run -n condapip-py36 python pyapp/pyapp.py
+
+
+  
+
+
