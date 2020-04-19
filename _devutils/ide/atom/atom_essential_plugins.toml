@@ -1,0 +1,2 @@
+# https://stackoverflow.com/questions/43013195/how-to-open-the-terminal-in-atom
+platformio-ide-terminal = "*"
