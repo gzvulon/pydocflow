@@ -1,6 +1,7 @@
 # https://taskfile.dev
 
-version: '2.3'
+version: '2.6'
+output: prefixed
 
 vars:
   GREETING: Conda PIP
@@ -46,7 +47,7 @@ tasks:
     cmds:
       - conda run -n condapip-py37 pip install fire
     status: 
-      - conda run -n condapip-py37 pip | grep fire
+      - conda run -n condapip-py37 pip freeze | grep fire
 
   venv-install-build:
     desc: _
@@ -56,7 +57,6 @@ tasks:
       - conda install -y n condapip-py37 pyinstaller
     status:
       - conda list -n condapip-py37 | grep pyinstaller
-    
   
   venv-update:
     desc: _
@@ -69,11 +69,48 @@ tasks:
     cmds:
       - task: venv-create
       - task: venv-update
-    
+  test2:
+    desc: _
+    cmds:
+      - mkdir -p _build_info
+      - |
+        conda run -n condapip-py37 \
+        time \                             
+          python \
+            pyapp/pyapp.py foo \
+        |& tee \
+          _build_info/test.log.txt \
+        | grep Hi \
+            && echo \
+            "task: Succeded to run task 'ci-test' \
+            log: $(realpath _build_info/test.log.txt)"
+          
   test:
     desc: _
     cmds:
-      - conda run -n condapip-py37 python pyapp/pyapp.py
+      - mkdir -p _build_info
+      - |
+        # ./run in venv \
+        conda run -n condapip-py37 \
+        # measure runtime \
+        time \                             
+        # test cmd  \
+        python pyapp/pyapp.py foo \     
+        |& tee \
+        # catch stderr and stdout and save to file \
+        _build_info/test.log.txt \
+        # assert test output \
+        | grep Hi \
+        # report success \        
+        && echo \
+        "task: Succeded to run task 'ci-test'
+        log: $(realpath _build_info/test.log.txt)"
+
+  ci-test:
+    deps:
+      - venv-install
+    cmds:
+      - task: test
 
   
 

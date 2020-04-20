@@ -1,0 +1,64 @@
+# https://taskfile.dev
+
+version: '2.3'
+
+vars:
+  GREETING: Conda PIP
+  TARGET_PROVIDED: "{{if .TARGET }} yes {{ else }} no {{end}}"
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - echo "{{.TARGET_PROVIDED}}"
+    silent: true
+
+  require_target_provided:
+    desc: _
+    cmds:
+      - echo "{{.TARGET_PROVIDED}}" | grep yes
+
+  _common: &ref__common
+    desc: _
+    deps:
+      - require_target_provided
+    env:
+      DEPS: "{{.TARGET}}"
+
+  install-os-deps:
+    <<: *ref__common
+    cmds:
+      - |
+        which apt \
+          && sudo apt-get install $(cat $DEPS/apt-get.deps.txt)
+          || brew install $(cat $DEPS/brew.deps.txt)
+
+  install-conda-deps:
+    cmds:
+      - conda install -n $VENV $(cat $DEPS/conda.deps.txt)
+      
+  install-pip-prod-deps:
+    cmds:
+      - conda run -n $VENV pip install -r $DEPS/pip-prod.deps.txt
+    
+  install-pip-dev-deps:
+    cmds:
+      - conda run -n $VENV pip install -r $DEPS/pip-dev.deps.txt
+
+  # install-custom-package-from-git-with-hard-build:
+  #   cmds:
+  #     - git clone custom-lib
+  #     - mkdir -p custom-lib/build
+  #     - cd custom-lib/build && cmake ..
+  #     - cd custom-lib/build && make
+  #     - |
+  #       cd custom-lib/build/python \
+  #       && conda run -n $VENV \
+  #       python setup.py install
+  install-deps:
+    desc: _
+    cmds:
+      - task: install-os-deps
+      - task: install-conda-deps
+      - task: install-pip-prod-deps
+      - tasl: install-pip-dev-deps
