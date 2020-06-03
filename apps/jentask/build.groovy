@@ -1,4 +1,5 @@
-// @Library("uvci@master") _
+@Library("jenlib@master") _
+// ===== /SHARED PART ====
 
 // --- globas vars ---
 def jg = [
@@ -51,7 +52,7 @@ def step_stages_from_tasks(jg, wd, filename, root_job){
         }
     }
 }
-
+ // ===== /SHARED PART ====
 // node(jg.node_label) {
 node() {
 timestamps {
@@ -60,12 +61,12 @@ timestamps {
         echo 'Fetch source'
         def scmvars = checkout scm
         def more = "repo_validate"
-      //   jen.set_build_name(currentBuild, scmvars, more)
-      //   jg['scmvars'] = scmvars
+        jen.set_build_name(currentBuild, scmvars, more)
+        jg['scmvars'] = scmvars
     }
 
     stage('commits'){
-      //   jen.desc_from_commits(currentBuild, jg)
+        jen.desc_from_commits(currentBuild, jg)
     }
 
     catchError {
