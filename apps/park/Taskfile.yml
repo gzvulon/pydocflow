@@ -29,16 +29,17 @@ tasks:
       enter environmet shell.
       usage '$(task venv:shell)'
     cmds:
-      - echo "conda activate {{.VENV_NAME}}"
+      - ./cenv.sh bash
+    # silent: yes
 
   venv:exists:
     desc: predicate. used for deps and checks
     cmds:
       - |
         conda info --envs | grep {{.VENV_NAME}} \
-          || echo "status=missing venv={{.VENV_NAME}}. \
+          || (echo "status=missing venv={{.VENV_NAME}}. \
           resolve='task venv:create'" \
-             && exit 1
+             && exit 1)
     silent: yes
 
   venv:create-safe: &ref_venv_create-safe
@@ -50,7 +51,7 @@ tasks:
       - |
         task venv:exists 2>/dev/null \
         && echo "tasker: using existig venv ^^^" \
-        || conda create -n {{.VENV_NAME}} python=3.7
+        || conda create -y -n {{.VENV_NAME}} python=3.7
       # create short alias for safe command
   venv:create: *ref_venv_create-safe
 
@@ -59,13 +60,38 @@ tasks:
     cmds:
       - conda env remove -n {{.VENV_NAME}}
 
+  __empty_var:
+    cmds:
+      - |
+        if [[ "{{.DEPS_LIST}}" == "" ]]; then \
+          echo "requred args DEPS_LIST=value"; fi
+    silent: yes
+
+  __empty_var__test:
+    cmds:
+      - ./tools/should work task __empty_var
+      - ./tools/should break task __empty_var DEPS_LIST=value
+
+  conda:install:deps:
+    desc: install conda packages
+    args:
+      DEPS_LIST:
+    cmds:
+      - echo "deps={{.DEPS_LIST}}"
+      - |
+        if [[ "{{.DEPS_LIST}}" == "" ]]; then \
+           echo required args: DEPS_LIST; exit 1 ; fi
+      - |
+        echo "installing $(cat {{.DEPS_LIST}} | wc -l) packages \
+        from {{.DEPS_LIST}}"
+      - conda install -n {{.VENV_NAME}} -y $(cat {{.DEPS_LIST}})
+    silent: yes
+
   venv:install:
     desc: install conda packages
     cmds:
-      - |
-        echo "installing $(cat deps.conda.deps.txt | wc -l) packages \
-        from deps.conda.deps.txt"
-      - conda install -n {{.VENV_NAME}} -y $(cat deps.conda.deps.txt)
+      - task conda:install:deps DEPS_LIST=deps/conda.deps.txt
+      - task conda:install:deps DEPS_LIST=deps/conda.dev.deps.txt
 
   venv:update:
     desc: create if not exsit and install deps.conda.deps
@@ -90,8 +116,11 @@ tasks:
   py:fmt:
     desc: run code autoformat
     cmds:
-      - yapf -ir -e .venv .
+      - yapf --style ./conf/style.yapf.toml -ir -e .venv .
 
-
+  tools:fix-exe:
+    desc: make all files in ./tools executable
+    cmds:
+      - chmod -R +x ./tools
 
 

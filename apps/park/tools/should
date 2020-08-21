@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e
+# set -x
+
+
+REQ="$1"
+echo "request: $1"
+shift
+echo "command: $@"
+
+"$@"
+RET="$?"
+
+if [[ "${REQ}_" -eq 'work_' ]];then
+    if [ $? -eq 0 ];then
+        RES="status=test.pass"
+        RCODE=0
+    else echo "status=test.fail"
+        RES="status=test.fail"
+        RCODE=1
+    fi
+
+elif [[ "${REQ}_" -eq 'break_' ]];then
+    if [ $? -eq 0 ];then
+        RES="status=test.fail"
+        RCODE=1
+    else echo "status=test.fail"
+        RES="status=test.pass"
+        RCODE=0
+    fi
+fi
+
+echo "$RES"
+exit $RCODE

@@ -12,12 +12,13 @@ def main():
         },
         index=list('abc'))
     table = pa.Table.from_pandas(df)
+    print(table)
 
 
-def _entrypoint():
+def entrypoint():
     import fire
     fire.Fire(main)
 
 
 if __name__ == "__main__":
-    _entrypoint()
+    entrypoint()
