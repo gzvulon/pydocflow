@@ -7,7 +7,7 @@ node{
 '''
 
 def def_text = '''
-pipelineJob('example') {
+pipelineJob('example') {F
     definition {
         cps {
             def pipeline_script="${pipe_text}"

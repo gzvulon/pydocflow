@@ -1,18 +1,74 @@
 # https://taskfile.dev
 
-version: '2'
+version: '2.3'
 
 vars:
-  GREETING: Hello, World!
+  GREETING: parquet
+  VENV_NAME: {sh: cat venv.name.txt}
 
 tasks:
   default:
     cmds:
       - echo "{{.GREETING}}"
+      - task -l
     silent: true
 
-  install-pq:
-    desc: _
+  conda:add-channel:forge:
+    desc: add conda-forge channel
     cmds:
-      - conda install -y -c conda-forge pyarrow
+      - conda config --add channels conda-forge
+
+  venv:sh:
+    desc: |
+      enter environmet shell.
+      usage '$(task venv:shell)'
+    cmds:
+      - echo "conda activate {{.VENV_NAME}}"
+
+  venv:create-safe: &ref_venv_create-safe
+    desc: create venv {{.VENV_NAME}}
+    cmds:
+      # here we test venv:sh command
+      # and use bash if expression syntax:
+      # if(check) then(&&) { echo ok } else(||) {resolve}
+      - |
+        $(task venv:sh) \
+        && echo "tasker: using existig venv: \
+            $(conda env list | grep {{.VENV_NAME}} " \
+        || conda create -n {{.VENV_NAME}} --python=3.7
+      # create short alias for safe command
+  venv:create: * ref_venv_create
+
+  venv:install:
+    desc: install conda packages
+    cmds:
+      - |
+        echo "installing $(cat deps.conda.deps.txt | wc -l) packages \
+        from deps.conda.deps.txt"
+      - conda install -y $(cat deps.conda.deps.txt)
+
+  venv:update:
+    desc: create if not exsit and install deps.conda.deps
+    cmds:
+      - task venv:create
+      - task venv:install
+
+  venv:upgrade:
+    desc: Updates packages to the latest compatible version.
+    cmds:
+      - task venv:create
+      - conda update -n {{.VENV_NAME}}
+
+  venv:test:sanity:
+    desc: check simple imports
+    cmds:
+      - ./cenv.sh python -c 'import sample_pq'
+
+  py:fmt:
+    desc: run code autoformat
+    cmds:
+      - yapf -ir -e .venv .
+
+
+
 
