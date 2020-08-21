@@ -2,4 +2,4 @@ pytest
 yapf
 jupyter
 ipython
-
+jupyterlab
