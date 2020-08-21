@@ -3,7 +3,7 @@ import pandas as pd
 import pyarrow as pa
 
 
-def main():
+def create_sample_dataframe():
     df = pd.DataFrame(
         {
             'one': [-1, np.nan, 2.5],
@@ -12,8 +12,11 @@ def main():
         },
         index=list('abc'))
     table = pa.Table.from_pandas(df)
-    print(table)
+    return table
 
+def main():
+    table=create_sample_dataframe()
+    print(table)
 
 def entrypoint():
     import fire

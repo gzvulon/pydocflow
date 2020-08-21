@@ -29,7 +29,7 @@ tasks:
       enter environmet shell.
       usage '$(task venv:shell)'
     cmds:
-      - ./cenv.sh bash
+       - ./tools/cenv.sh bash
     # silent: yes
 
   venv:exists:
@@ -110,9 +110,7 @@ tasks:
     deps:
       - venv:exists
     cmds:
-      - |
-        ./cenv.sh python -c 'import sample_pq'
-
+      - ./tools/cenv.sh python -c 'import sample_pq"
   py:fmt:
     desc: run code autoformat
     cmds:
@@ -122,5 +120,11 @@ tasks:
     desc: make all files in ./tools executable
     cmds:
       - chmod -R +x ./tools
+
+  test:
+    desc: _
+    cmds:
+      - ./tools/cenv.sh pytest -s $(ls -1 *__test.py)
+
 
 
