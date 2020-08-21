@@ -3,6 +3,10 @@ import pandas as pd
 import pyarrow as pa
 
 
+def flow_just_for_fun(s: int, sdf):
+    pass
+
+
 def create_sample_dataframe():
     df = pd.DataFrame(
         {
@@ -14,9 +18,11 @@ def create_sample_dataframe():
     table = pa.Table.from_pandas(df)
     return table
 
+
 def main():
-    table=create_sample_dataframe()
+    table = create_sample_dataframe()
     print(table)
+
 
 def entrypoint():
     import fire
