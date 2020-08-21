@@ -1,6 +1,11 @@
 # https://taskfile.dev
 
-version: '2.3'
+version: '3'
+# curl -sL https://taskfile.dev/install.sh | sh
+# curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh | sh
+
+output: 'prefixed'
+
 
 vars:
   GREETING: parquet
@@ -12,6 +17,7 @@ tasks:
       - echo "{{.GREETING}}"
       - task -l
     silent: true
+    prefix: "-"
 
   conda:add-channel:forge:
     desc: add conda-forge channel
@@ -19,11 +25,21 @@ tasks:
       - conda config --add channels conda-forge
 
   venv:sh:
-    desc: |
+    desc: >-
       enter environmet shell.
       usage '$(task venv:shell)'
     cmds:
       - echo "conda activate {{.VENV_NAME}}"
+
+  venv:exists:
+    desc: predicate. used for deps and checks
+    cmds:
+      - |
+        conda info --envs | grep {{.VENV_NAME}} \
+          || echo "status=missing venv={{.VENV_NAME}}. \
+          resolve='task venv:create'" \
+             && exit 1
+    silent: yes
 
   venv:create-safe: &ref_venv_create-safe
     desc: create venv {{.VENV_NAME}}
@@ -32,12 +48,16 @@ tasks:
       # and use bash if expression syntax:
       # if(check) then(&&) { echo ok } else(||) {resolve}
       - |
-        $(task venv:sh) \
-        && echo "tasker: using existig venv: \
-            $(conda env list | grep {{.VENV_NAME}} " \
-        || conda create -n {{.VENV_NAME}} --python=3.7
+        task venv:exists 2>/dev/null \
+        && echo "tasker: using existig venv ^^^" \
+        || conda create -n {{.VENV_NAME}} python=3.7
       # create short alias for safe command
   venv:create: *ref_venv_create-safe
+
+  venv:remove:
+    desc: clear venv
+    cmds:
+      - conda env remove -n {{.VENV_NAME}}
 
   venv:install:
     desc: install conda packages
@@ -45,7 +65,7 @@ tasks:
       - |
         echo "installing $(cat deps.conda.deps.txt | wc -l) packages \
         from deps.conda.deps.txt"
-      - conda install -y $(cat deps.conda.deps.txt)
+      - conda install -n {{.VENV_NAME}} -y $(cat deps.conda.deps.txt)
 
   venv:update:
     desc: create if not exsit and install deps.conda.deps
@@ -61,8 +81,11 @@ tasks:
 
   venv:test:sanity:
     desc: check simple imports
+    deps:
+      - venv:exists
     cmds:
-      - ./cenv.sh python -c 'import sample_pq'
+      - |
+        ./cenv.sh python -c 'import sample_pq'
 
   py:fmt:
     desc: run code autoformat

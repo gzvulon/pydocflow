@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash --login
 
-conda activate $(cat venv.name.txt)
+exec conda run -n  $(cat venv.name.txt) exec $@
 
-exec $@
