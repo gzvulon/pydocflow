@@ -4,9 +4,20 @@ import pyarrow as pa
 
 
 def main():
-    df = pd.DataFrame({'one': [-1, np.nan, 2.5],
-                    'two': ['foo', 'bar', 'baz'],
-                    'three': [True, False, True]},
-                        index=list('abc'))
+    df = pd.DataFrame(
+        {
+            'one': [-1, np.nan, 2.5],
+            'two': ['foo', 'bar', 'baz'],
+            'three': [True, False, True]
+        },
+        index=list('abc'))
     table = pa.Table.from_pandas(df)
+
+
+def _entrypoint():
+    import fire
+    fire.Fire(main)
+
+
 if __name__ == "__main__":
+    _entrypoint()
