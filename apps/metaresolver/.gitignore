@@ -1,0 +1,6 @@
+*.pyc
+_out
+_out*
+out
+.vscode
+.idea

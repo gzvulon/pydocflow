@@ -1,0 +1,27 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  GREETING: "Test resolver"
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+      - task -l
+    silent: true
+
+  test:resolve:uri-type:http-url:
+    desc: _
+    dir: ..
+    cmds:
+      - python resolver.py uri-type 'http://example.com/'
+
+  test:resolve:uri-http:http-url:
+    desc: _
+    dir: ..
+    env:
+      META_RC__CONF_PATH: cli-tests/cli-tests.mresolve.conf
+    cmds:
+      - python resolver.py uri-http 'http://example.com/'
