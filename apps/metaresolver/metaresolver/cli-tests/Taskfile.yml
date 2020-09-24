@@ -22,6 +22,30 @@ tasks:
     desc: _
     dir: ..
     env:
-      META_RC__CONF_PATH: cli-tests/cli-tests.mresolve.conf
+      # META_RC__CONF_PATH: cli-tests/cli-tests.mresolve.conf
+      META_RC__REPLACE: "http[s]?://-=>/fs_root/"
     cmds:
       - python resolver.py uri-http 'http://example.com/'
+
+  test:resolve:uri-http:uri-fs:
+    desc: _
+    dir: ..
+    env:
+      # META_RC__CONF_PATH: cli-tests/cli-tests.mresolve.conf
+      META_RC__REPLACE: http://-=>/fs_root/http/ https://-=>/fs_root/https/
+    cmds:
+      - python resolver.py uri-fs 'http://example.com/'
+
+  test:resolve:uri2rclone:
+    desc: _
+    dir: ..
+    env:
+      # META_RC__CONF_PATH: cli-tests/cli-tests.mresolve.conf
+      META_RC__REPLACE: "http://example.com/-=>http:"
+    cmds:
+      - python resolver.py uri-fs 'http://example.com/bucket/path/to/item.keep'
+      - rz cat http://example.com/bucket/path/to/item.keep
+      - git clone $(rz git http://example.com/bucket/path/to/git-repo.git)
+      - git clone $(rz any http://example.com/bucket/path/to/git-repo.git)
+      - rz cat esdb:index | rz write /sdf
+      
